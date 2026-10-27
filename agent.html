@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Policy Agent | Road Safety</title>
+<style>
+  :root { --bg:#fff; --fg:#1a1a1a; --muted:#666; --card:#f5f6f8; --line:#d9dce1; --accent:#c0392b; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#14161a; --fg:#eceef1; --muted:#9aa0a8; --card:#1e2127; --line:#32363e; --accent:#ff6b5b; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui,sans-serif; }
+  main { max-width:860px; margin:0 auto; padding:24px 16px 64px; }
+  a { color:var(--accent); }
+  h1 { margin:.2em 0; } .muted { color:var(--muted); }
+  form { display:flex; gap:8px; margin:16px 0 8px; }
+  input { flex:1; padding:10px 12px; font-size:1rem; border:1px solid var(--line); border-radius:8px; background:var(--card); color:var(--fg); }
+  button { padding:10px 16px; border:0; border-radius:8px; background:var(--accent); color:#fff; font-size:1rem; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:wait; }
+  .chips button { background:var(--card); color:var(--fg); border:1px solid var(--line); font-size:.85rem; padding:6px 10px; margin:0 6px 6px 0; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin:14px 0; }
+  .card h3 { margin:0 0 6px; } .tag { font-size:.75rem; padding:2px 8px; border-radius:99px; border:1px solid var(--line); margin-left:6px; }
+  .label { font-weight:600; } ul { margin:4px 0 0 18px; padding:0; }
+  .err { border-color:var(--accent); color:var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Road-safety policy agent</h1>
+  <p class="muted">Ask a question. The agent answers using only the sourced facts in <code>agent/facts.json</code>, and lists trade-offs for every option. These are options for decision-makers, not decisions.</p>
+  <form id="f">
+    <input id="q" maxlength="500" placeholder="e.g. Why do road deaths rise despite stricter rules?" required>
+    <button id="go">Analyse</button>
+  </form>
+  <div class="chips" id="chips"></div>
+  <div id="out" aria-live="polite"></div>
+</main>
+<script>
+const examples = [
+  "Why do road deaths rise despite stricter rules?",
+  "How should India deal with Rs 23,000 crore in unpaid e-challans?",
+  "Will raising the licence pass mark to 75% reduce road deaths?"
+];
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const list = a => "<ul>" + (a||[]).map(x => `<li>${esc(x)}</li>`).join("") + "</ul>";
+
+examples.forEach(t => {
+  const b = document.createElement("button"); b.type = "button"; b.textContent = t;
+  b.onclick = () => { $("q").value = t; $("f").requestSubmit(); };
+  $("chips").appendChild(b);
+});
+
+$("f").addEventListener("submit", async e => {
+  e.preventDefault();
+  $("go").disabled = true; $("out").innerHTML = '<p class="muted">Analysing\u2026</p>';
+  try {
+    const r = await fetch("/api/policies", { method:"POST", headers:{"Content-Type":"application/json"},
+                                              body: JSON.stringify({ question: $("q").value }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || r.statusText);
+    $("out").innerHTML = `<div class="card"><span class="label">Issue analysis</span><p>${esc(d.issue_analysis||"")}</p></div>` +
+      d.policies.map((p,i) => `<div class="card"><h3>${i+1}. ${esc(p.policy)}<span class="tag">difficulty: ${esc(p.implementation_difficulty)}</span></h3>
+        <p><span class="label">Why:</span> ${esc(p.justification)}</p>
+        <p><span class="label">Evidence:</span> ${esc((p.evidence||[]).join("; "))}</p>
+        <p><span class="label">Expected impact:</span> ${esc(p.expected_impact)}</p>
+        <span class="label">Trade-offs:</span>${list(p.trade_offs)}</div>`).join("");
+  } catch (err) {
+    $("out").innerHTML = `<div class="card err">${esc(err.message)}</div>`;
+  } finally { $("go").disabled = false; }
+});
+</script>
+</body>
+</html>

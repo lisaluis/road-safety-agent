@@ -1,0 +1,14 @@
+[
+  {"id": "F1", "fact": "Road deaths in India rose from 146,133 in 2015 to 183,382 in 2025, roughly 21 every hour.", "source": "TOI editorial 'Sense & Licence'"},
+  {"id": "F2", "fact": "Govt plans to raise the online safe-driving test pass mark from 60% to 75%.", "source": "TOI editorial 'Sense & Licence'"},
+  {"id": "F3", "fact": "Vietnam requires a 91% pass mark on its driving test, yet its road fatality rate is 13 per lakh population (India: 16.2).", "source": "TOI editorial, citing WHO"},
+  {"id": "F4", "fact": "Singapore has no similarly tough driving test but only 1.4 road fatalities per lakh population.", "source": "TOI editorial, citing WHO"},
+  {"id": "F5", "fact": "E-challans worth Rs 23,000 crore remain unpaid across states (told to the Supreme Court).", "source": "TOI editorial 'Sense & Licence'"},
+  {"id": "F6", "fact": "A Delhi-registered BMW had 42 challans for driving without PUCC, showing repeat offenders face no consequence.", "source": "TOI report cited in editorial"},
+  {"id": "F7", "fact": "The editorial argues India needs attitudinal change and strict enforcement; attitudes will not change while fines go unpaid.", "source": "TOI editorial 'Sense & Licence'"},
+  {"id": "F8", "fact": "Section 181: driving without a licence is fined Rs 5,000 (earlier up to Rs 500).", "source": "MV (Amendment) Act 2019 - VERIFY against the Act"},
+  {"id": "F9", "fact": "Section 185: first-offence drunken driving is a fine up to Rs 10,000 and/or up to 6 months imprisonment.", "source": "MV (Amendment) Act 2019 - VERIFY against the Act"},
+  {"id": "F10", "fact": "Section 194D: riding without a helmet is a Rs 1,000 fine and 3-month licence disqualification.", "source": "MV (Amendment) Act 2019 - VERIFY against the Act"},
+  {"id": "F11", "fact": "Section 199B allows fines to rise annually by up to 10%; Section 210A lets States notify a 1-10x multiplier on fines.", "source": "MV (Amendment) Act 2019 - VERIFY against the Act"},
+  {"id": "F12", "fact": "Section 183(1): over-speeding is Rs 1,000-2,000 for light motor vehicles and Rs 2,000-4,000 for medium vehicles; licence can be impounded for repeat offences.", "source": "MV (Amendment) Act 2019 - VERIFY against the Act"}
+]
